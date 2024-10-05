@@ -11,7 +11,19 @@
 </head>
 
 <body>
-    <h1>Список файлов и папок</h1>
+
+    <form method="get" action="{% url 'file_list' %}">
+        <input type="hidden" name="public_key" value="{{ public_key }}">
+        <label for="file_type">Тип файлов:</label>
+        <select name="file_type" id="file_type">
+            <option value="all">Все</option>
+            <option value="dir">Папки</option>
+            <option value="file">Файлы</option>
+        </select>
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <!-- <h1>Список файлов и папок</h1>
     <ul>
         {% for item in items %}
         <li>
@@ -22,7 +34,23 @@
             {% endif %}
         </li>
         {% endfor %}
-    </ul>
+    </ul> -->
+
+    <form method="post" action="{% url 'download_multiple' %}">
+        {% csrf_token %}
+        <input type="hidden" name="public_key" value="{{ public_key }}">
+        <ul>
+            {% for item in items %}
+            {% if item.type == 'file' %}
+            <li>
+                <input type="checkbox" name="paths" value="{{ item.path }}">
+                {{ item.name }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <button type="submit">Скачать выбранные файлы</button>
+    </form>
 </body>
 
 </html>
