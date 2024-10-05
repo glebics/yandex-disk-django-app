@@ -1,13 +1,16 @@
-from django.http import (HttpResponseRedirect, HttpResponse)
+from django.http import (HttpResponseRedirect, HttpResponse, HttpRequest)
 from django.shortcuts import (render, redirect)
 import requests
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'diskviewer/index.html')
 
 
-def file_list(request):
+def file_list(request: HttpRequest) -> HttpResponse:
+    """
+    Обрабатывает ввод публичной ссылки и отображает список файлов.
+    """
     if request.method == 'POST':
         public_key = request.POST.get('public_key')
         api_url = 'https://cloud-api.yandex.net/v1/disk/public/resources'
@@ -23,7 +26,10 @@ def file_list(request):
         return redirect('index')
 
 
-def download_file(request):
+def download_file(request: HttpRequest) -> HttpResponse:
+    """
+    Обрабатывает скачивание выбранного файла.
+    """
     public_key = request.GET.get('public_key')
     path = request.GET.get('path')
     api_url = 'https://cloud-api.yandex.net/v1/disk/public/resources/download'
