@@ -1,0 +1,25 @@
+<!-- templates/diskviewer/file_list.html -->
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Список файлов</title>
+</head>
+
+<body>
+    <h1>Список файлов и папок</h1>
+    <ul>
+        {% for item in items %}
+        <li>
+            {{ item.name }} - {{ item.type }}
+            {% if item.type == 'file' %}
+            <a
+                href="{% url 'download_file' %}?path={{ item.path|urlencode }}&public_key={{ public_key|urlencode }}">Скачать</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
